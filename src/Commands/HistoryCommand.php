@@ -26,7 +26,7 @@ class HistoryCommand extends Command {
                 'driver',
                 'D',
                 InputOption::VALUE_OPTIONAL,
-                'Driver for storage connection [default: "Database"]'
+                'Driver for storage connection [default: "database"]'
             );
     }
     
