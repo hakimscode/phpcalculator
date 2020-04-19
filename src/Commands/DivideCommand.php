@@ -5,11 +5,14 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Jakmall\Recruitment\Calculator\Services\CalculateService;
 
 class DivideCommand extends Command {
     protected static $defaultName = 'divide';
+    private $calculateService;
 
     public function configure() {
+        $this->calculateService = new CalculateService();
         $this
             ->setDescription('Divide all given numbers')
             ->addArgument(
@@ -21,17 +24,6 @@ class DivideCommand extends Command {
     
     public function execute(InputInterface $input, OutputInterface $output) {
         $numbers = $input->getArgument('numbers');
-        $result = $numbers[0];
-        $out = "";
-        for($i=0; $i<count($numbers); $i++){
-            $result /= $i != 0 ?
-                $numbers[$i] :
-                1;
-            $out .= $i == count($numbers) - 1 ? 
-                $numbers[$i] . ' = ' . $result : 
-                $numbers[$i] . ' - ';
-        }
-
-        $output->write($out);
+        $output->write($this->calculateService->divide($numbers));
     }
 }

@@ -5,11 +5,14 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Jakmall\Recruitment\Calculator\Services\CalculateService;
 
 class AddCommand extends Command {
     protected static $defaultName = 'add';
+    private $calculateService;
 
     public function configure() {
+        $this->calculateService = new CalculateService();
         $this
             ->setDescription('Add all given numbers')
             ->addArgument(
@@ -21,15 +24,6 @@ class AddCommand extends Command {
     
     public function execute(InputInterface $input, OutputInterface $output) {
         $numbers = $input->getArgument('numbers');
-        $sumNumbers = 0;
-        $out = "";
-        for($i=0; $i<count($numbers); $i++){
-            $sumNumbers += $numbers[$i];
-            $out .= $i == count($numbers) - 1 ? 
-                $numbers[$i] . ' = ' . $sumNumbers : 
-                $numbers[$i] . ' + ';
-        }
-
-        $output->write($out);
+        $output->write($this->calculateService->add($numbers));
     }
 }

@@ -5,11 +5,14 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Jakmall\Recruitment\Calculator\Services\CalculateService;
 
 class SubtractCommand extends Command {
     protected static $defaultName = 'subtract';
+    private $calculateService;
 
     public function configure() {
+        $this->calculateService = new CalculateService();
         $this
             ->setDescription('Subtract all given numbers')
             ->addArgument(
@@ -21,17 +24,6 @@ class SubtractCommand extends Command {
     
     public function execute(InputInterface $input, OutputInterface $output) {
         $numbers = $input->getArgument('numbers');
-        $sumNumbers = $numbers[0];
-        $out = "";
-        for($i=0; $i<count($numbers); $i++){
-            $sumNumbers -= $i != 0 ?
-                $numbers[$i] :
-                0;
-            $out .= $i == count($numbers) - 1 ? 
-                $numbers[$i] . ' = ' . $sumNumbers : 
-                $numbers[$i] . ' - ';
-        }
-
-        $output->write($out);
+        $output->write($this->calculateService->subtract($numbers));
     }
 }

@@ -5,11 +5,14 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Jakmall\Recruitment\Calculator\Services\CalculateService;
 
 class PowCommand extends Command {
     protected static $defaultName = 'pow';
+    private $calculateService;
 
     public function configure() {
+        $this->calculateService = new CalculateService();
         $this
             ->setDescription('Exponent given numbers')
             ->addArgument(
@@ -28,8 +31,6 @@ class PowCommand extends Command {
     public function execute(InputInterface $input, OutputInterface $output) {
         $base = $input->getArgument('base');
         $exp = $input->getArgument('exp');
-        $out = $base . ' ^ ' . $exp . ' = ' . pow($base, $exp);
-
-        $output->write($out);
+        $output->write($this->calculateService->pow($base, $exp));
     }
 }
